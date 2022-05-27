@@ -1,0 +1,3 @@
+mutation SendOrderDetails($orderDetailsId: Int!) {
+  sendOrderDetails(orderDetailsId: $orderDetailsId)
+}

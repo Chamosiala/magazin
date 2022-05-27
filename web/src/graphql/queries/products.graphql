@@ -1,0 +1,21 @@
+query Products($limit: Int!, $cursor: String) {
+  products(limit: $limit, cursor: $cursor) {
+    id
+    createdAt
+    updatedAt
+    name
+    desc
+    descSnippet
+    price
+    SKU
+    category
+    discount {
+      id
+      name
+      desc
+      discountPercent
+      createdAt
+      updatedAt
+    }
+  }
+}

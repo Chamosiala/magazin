@@ -1,0 +1,15 @@
+mutation CreateCartItem($input: CartItemInput!) {
+  createCartItem(input: $input) {
+    errors {
+      ...RegularError
+    }
+    cartItem {
+      id
+      productId
+      userId
+      quantity
+      createdAt
+      updatedAt
+    }
+  }
+}

@@ -1,0 +1,16 @@
+mutation CreateOrderDetails($input: OrderDetailsInput!) {
+  createOrderDetails(input: $input) {
+    errors {
+      field
+      message
+    }
+    orderDetails {
+      id
+      userId
+      judet
+      localitate
+      address
+      total
+    }
+  }
+}

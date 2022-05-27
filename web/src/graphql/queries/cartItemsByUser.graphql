@@ -1,0 +1,30 @@
+query CartItemsByUser($limit: Int!, $cursor: String) {
+  cartItemsByUser(limit: $limit, cursor: $cursor) {
+    id
+    productId
+    userId
+    quantity
+    createdAt
+    updatedAt
+    product {
+      id
+      createdAt
+      updatedAt
+      name
+      desc
+      descSnippet
+      price
+      SKU
+      category
+      discount {
+        id
+        name
+        desc
+        discountPercent
+        createdAt
+        updatedAt
+      }
+    }
+    totalPrice
+  }
+}
