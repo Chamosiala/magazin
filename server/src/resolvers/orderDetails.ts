@@ -8,6 +8,7 @@ import {
   Int,
   Mutation,
   ObjectType,
+  Query,
   Resolver,
   Root,
   UseMiddleware,
@@ -21,6 +22,7 @@ import { FieldError } from "./user";
 import argon2 from "argon2";
 import { sendEmail } from "../utils/sendEmail";
 import { orderItemToHtml } from "../utils/orderItemToHtml";
+import { UserPermission } from "../entities/UserPermission";
 
 @InputType()
 class OrderDetailsInput {
@@ -52,6 +54,16 @@ export class OrderDetailsResolver {
   @FieldResolver(() => [OrderItem])
   orderItems(@Root() orderDetails: OrderDetails) {
     return OrderItem.findBy({ orderId: orderDetails.id });
+  }
+
+  @FieldResolver(() => String)
+  dataFrumoasa(@Root() root: OrderDetails) {
+    return root.createdAt
+      .toLocaleString("pt-PT", {
+        dateStyle: "short",
+        timeStyle: "short",
+      })
+      .replace(".", "/");
   }
 
   @Mutation(() => OrderDetailsResponse)
@@ -170,5 +182,31 @@ export class OrderDetailsResolver {
     );
 
     return true;
+  }
+
+  @Query(() => [OrderDetails], { nullable: true })
+  ordersByUser(@Ctx() { req }: MyContext): Promise<OrderDetails[] | null> {
+    return OrderDetails.findBy({ userId: req.session.userId });
+  }
+
+  @Query(() => OrderDetails, { nullable: true })
+  async orderById(
+    @Arg("id", () => Int) id: number,
+    @Ctx() { req }: MyContext
+  ): Promise<OrderDetails | null> {
+    let order = await OrderDetails.findOneBy({ id });
+
+    if (!order) {
+      throw new Error("order does not exist");
+    } else if (order.userId !== req.session.userId) {
+      let userPermission = await UserPermission.findOneBy({
+        userId: req.session.userId,
+      });
+      if (userPermission) {
+        return order;
+      }
+      throw new Error("order belongs to someone else");
+    }
+    return OrderDetails.findOneBy({ id, userId: req.session.userId });
   }
 }

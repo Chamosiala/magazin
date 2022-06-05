@@ -52,6 +52,10 @@ export class OrderDetails extends BaseEntity {
   @Column()
   codSecuritate: string;
 
+  @Field()
+  @Column({ default: "In asteptare" })
+  status!: string;
+
   @Field(() => [OrderItem], { nullable: true })
   @OneToMany(() => OrderItem, (orderItem) => orderItem.order)
   orderItems: OrderItem[];

@@ -10,6 +10,26 @@ mutation CreateCartItem($input: CartItemInput!) {
       quantity
       createdAt
       updatedAt
+      product {
+        id
+        createdAt
+        updatedAt
+        name
+        desc
+        descSnippet
+        price
+        SKU
+        category
+        discount {
+          id
+          name
+          desc
+          discountPercent
+          createdAt
+          updatedAt
+        }
+      }
+      totalPrice
     }
   }
 }

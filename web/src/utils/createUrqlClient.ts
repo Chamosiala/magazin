@@ -1,14 +1,17 @@
 import { cacheExchange } from "@urql/exchange-graphcache";
 import Router from "next/router";
-import { dedupExchange, Exchange, fetchExchange } from "urql";
+import { dedupExchange, Exchange, fetchExchange, gql } from "urql";
 import { pipe, tap } from "wonka";
 import {
+  CartItemsDocument,
   DeleteCartItemMutationVariables,
   LoginMutation,
   LogoutMutation,
   MeDocument,
   MeQuery,
+  CartItemsQuery,
   RegisterMutation,
+  CreateCartItemMutation,
 } from "../generated/graphql";
 import { betterUpdateQuery } from "./betterUpdateQuery";
 
@@ -23,6 +26,8 @@ export const errorExchange: Exchange =
         } else if (error?.message.includes("Permission denied")) {
           alert("Permission denied");
           Router.replace("/");
+        } else if (error?.message.includes("order")) {
+          Router.replace("/user/orders");
         }
       })
     );
@@ -44,6 +49,18 @@ export const createUrqlClient = (ssrExchange: any) => ({
               { query: MeDocument },
               _result,
               () => ({ me: null })
+            );
+          },
+          createCartItem: (_result, _args, cache, _info) => {
+            betterUpdateQuery<CreateCartItemMutation, CartItemsQuery>(
+              cache,
+              { query: CartItemsDocument },
+              _result,
+              (result, query) => {
+                query.cartItems.push(result.createCartItem.cartItem!);
+                console.log("this is the query: ", query);
+                return query;
+              }
             );
           },
           deleteCartItem: (_result, args, cache, info) => {

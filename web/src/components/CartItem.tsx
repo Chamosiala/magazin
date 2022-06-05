@@ -19,7 +19,7 @@ export const CartItem: React.FC<CartItemProps> = ({ cartItem }) => {
         mx={"auto"}
         maxWidth="128.5px"
         maxHeight="128.5px"
-        src="https://i.imgur.com/sVH9N1X.png"
+        src="https://s.iw.ro/gateway/g/ZmlsZVNvdXJjZT1odHRwJTNBJTJGJTJG/c3RvcmFnZWRpZ2lhbmltYWx3b3JsZC5y/Y3MtcmRzLnJvJTJGc3RvcmFnZSUyRjIw/MTklMkYwMiUyRjI4JTJGMTA0NzU0Nl8x/MDQ3NTQ2X2Jyb2FzY2EtbWljYS0xLmpw/ZyZ3PTc4MCZoPTYwMCZ6Yz0xJmhhc2g9/ZmUyYTk3NWQwZmE5YzAzMTJmZTE5NWYxYmM4ZTQ3NTc=.thumb.jpg"
       ></Image>
       {!data ? (
         <div>Loading...</div>

@@ -24,6 +24,7 @@ export type CartItem = {
   quantity: Scalars['Float'];
   totalPrice: Scalars['Float'];
   updatedAt: Scalars['String'];
+  user: User;
   userId: Scalars['Int'];
 };
 
@@ -142,11 +143,13 @@ export type OrderDetails = {
   address: Scalars['String'];
   codSecuritate: Scalars['String'];
   createdAt: Scalars['String'];
+  dataFrumoasa: Scalars['String'];
   id: Scalars['Int'];
   judet: Scalars['String'];
   localitate: Scalars['String'];
   numarCard: Scalars['String'];
   orderItems?: Maybe<Array<OrderItem>>;
+  status: Scalars['String'];
   total: Scalars['Float'];
   updatedAt: Scalars['String'];
   user: User;
@@ -178,6 +181,15 @@ export type OrderItem = {
   productId: Scalars['Float'];
   quantity: Scalars['Float'];
   updatedAt: Scalars['String'];
+};
+
+export type PaymentDetails = {
+  __typename?: 'PaymentDetails';
+  createdAt: Scalars['String'];
+  id: Scalars['Float'];
+  order: OrderDetails;
+  updatedAt: Scalars['String'];
+  user: User;
 };
 
 export type Product = {
@@ -214,6 +226,8 @@ export type Query = {
   cartItemsByUser: Array<CartItem>;
   hello: Scalars['String'];
   me?: Maybe<User>;
+  orderById?: Maybe<OrderDetails>;
+  ordersByUser?: Maybe<Array<OrderDetails>>;
   product?: Maybe<Product>;
   productByName?: Maybe<Product>;
   products: Array<Product>;
@@ -229,6 +243,11 @@ export type QueryCartItemsArgs = {
 export type QueryCartItemsByUserArgs = {
   cursor?: InputMaybe<Scalars['String']>;
   limit: Scalars['Int'];
+};
+
+
+export type QueryOrderByIdArgs = {
+  id: Scalars['Int'];
 };
 
 
@@ -271,6 +290,7 @@ export type User = {
   lastName: Scalars['String'];
   localitate: Scalars['String'];
   orders?: Maybe<Array<OrderDetails>>;
+  paymentDetails?: Maybe<Array<PaymentDetails>>;
   telephone: Scalars['Float'];
   updatedAt: Scalars['String'];
   username: Scalars['String'];
@@ -300,6 +320,8 @@ export type UserResponse = {
 
 export type RegularErrorFragment = { __typename?: 'FieldError', field: string, message: string };
 
+export type RegularOrderFragment = { __typename?: 'OrderDetails', id: number, status: string, total: number, address: string, dataFrumoasa: string, createdAt: string, updatedAt: string, orderItems?: Array<{ __typename?: 'OrderItem', quantity: number, product: { __typename?: 'Product', id: number, createdAt: string, updatedAt: string, name: string, desc: string, descSnippet: string, price: number, SKU: string, category: string, discount?: { __typename?: 'Discount', id: number, name: string, desc: string, discountPercent: number, createdAt: string, updatedAt: string } | null } }> | null };
+
 export type RegularUserFragment = { __typename?: 'User', id: number, username: string, email: string, firstName: string, lastName: string, judet: string, localitate: string, address: string, telephone: number, isAdmin: boolean };
 
 export type RegularUserResponseFragment = { __typename?: 'UserResponse', errors?: Array<{ __typename?: 'FieldError', field: string, message: string }> | null, user?: { __typename?: 'User', id: number, username: string, email: string, firstName: string, lastName: string, judet: string, localitate: string, address: string, telephone: number, isAdmin: boolean } | null };
@@ -317,7 +339,7 @@ export type CreateCartItemMutationVariables = Exact<{
 }>;
 
 
-export type CreateCartItemMutation = { __typename?: 'Mutation', createCartItem: { __typename?: 'CartItemResponse', errors?: Array<{ __typename?: 'FieldError', field: string, message: string }> | null, cartItem?: { __typename?: 'CartItem', id: number, productId: number, userId: number, quantity: number, createdAt: string, updatedAt: string } | null } };
+export type CreateCartItemMutation = { __typename?: 'Mutation', createCartItem: { __typename?: 'CartItemResponse', errors?: Array<{ __typename?: 'FieldError', field: string, message: string }> | null, cartItem?: { __typename?: 'CartItem', id: number, productId: number, userId: number, quantity: number, createdAt: string, updatedAt: string, totalPrice: number, product: { __typename?: 'Product', id: number, createdAt: string, updatedAt: string, name: string, desc: string, descSnippet: string, price: number, SKU: string, category: string, discount?: { __typename?: 'Discount', id: number, name: string, desc: string, discountPercent: number, createdAt: string, updatedAt: string } | null } } | null } };
 
 export type CreateOrderDetailsMutationVariables = Exact<{
   input: OrderDetailsInput;
@@ -400,6 +422,18 @@ export type MeQueryVariables = Exact<{ [key: string]: never; }>;
 
 export type MeQuery = { __typename?: 'Query', me?: { __typename?: 'User', id: number, username: string, email: string, firstName: string, lastName: string, judet: string, localitate: string, address: string, telephone: number, isAdmin: boolean } | null };
 
+export type OrderByIdQueryVariables = Exact<{
+  id: Scalars['Int'];
+}>;
+
+
+export type OrderByIdQuery = { __typename?: 'Query', orderById?: { __typename?: 'OrderDetails', id: number, status: string, total: number, address: string, dataFrumoasa: string, createdAt: string, updatedAt: string, orderItems?: Array<{ __typename?: 'OrderItem', quantity: number, product: { __typename?: 'Product', id: number, createdAt: string, updatedAt: string, name: string, desc: string, descSnippet: string, price: number, SKU: string, category: string, discount?: { __typename?: 'Discount', id: number, name: string, desc: string, discountPercent: number, createdAt: string, updatedAt: string } | null } }> | null } | null };
+
+export type OrdersByUserQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type OrdersByUserQuery = { __typename?: 'Query', ordersByUser?: Array<{ __typename?: 'OrderDetails', id: number, status: string, total: number, address: string, dataFrumoasa: string, createdAt: string, updatedAt: string, orderItems?: Array<{ __typename?: 'OrderItem', quantity: number, product: { __typename?: 'Product', id: number, createdAt: string, updatedAt: string, name: string, desc: string, descSnippet: string, price: number, SKU: string, category: string, discount?: { __typename?: 'Discount', id: number, name: string, desc: string, discountPercent: number, createdAt: string, updatedAt: string } | null } }> | null }> | null };
+
 export type ProductQueryVariables = Exact<{
   id: Scalars['Int'];
 }>;
@@ -422,6 +456,39 @@ export type ProductsQueryVariables = Exact<{
 
 export type ProductsQuery = { __typename?: 'Query', products: Array<{ __typename?: 'Product', id: number, createdAt: string, updatedAt: string, name: string, desc: string, descSnippet: string, price: number, SKU: string, category: string, discount?: { __typename?: 'Discount', id: number, name: string, desc: string, discountPercent: number, createdAt: string, updatedAt: string } | null }> };
 
+export const RegularOrderFragmentDoc = gql`
+    fragment RegularOrder on OrderDetails {
+  id
+  orderItems {
+    product {
+      id
+      createdAt
+      updatedAt
+      name
+      desc
+      descSnippet
+      price
+      SKU
+      category
+      discount {
+        id
+        name
+        desc
+        discountPercent
+        createdAt
+        updatedAt
+      }
+    }
+    quantity
+  }
+  status
+  total
+  address
+  dataFrumoasa
+  createdAt
+  updatedAt
+}
+    `;
 export const RegularErrorFragmentDoc = gql`
     fragment RegularError on FieldError {
   field
@@ -477,6 +544,26 @@ export const CreateCartItemDocument = gql`
       quantity
       createdAt
       updatedAt
+      product {
+        id
+        createdAt
+        updatedAt
+        name
+        desc
+        descSnippet
+        price
+        SKU
+        category
+        discount {
+          id
+          name
+          desc
+          discountPercent
+          createdAt
+          updatedAt
+        }
+      }
+      totalPrice
     }
   }
 }
@@ -675,6 +762,28 @@ export const MeDocument = gql`
 
 export function useMeQuery(options?: Omit<Urql.UseQueryArgs<MeQueryVariables>, 'query'>) {
   return Urql.useQuery<MeQuery>({ query: MeDocument, ...options });
+};
+export const OrderByIdDocument = gql`
+    query OrderById($id: Int!) {
+  orderById(id: $id) {
+    ...RegularOrder
+  }
+}
+    ${RegularOrderFragmentDoc}`;
+
+export function useOrderByIdQuery(options: Omit<Urql.UseQueryArgs<OrderByIdQueryVariables>, 'query'>) {
+  return Urql.useQuery<OrderByIdQuery>({ query: OrderByIdDocument, ...options });
+};
+export const OrdersByUserDocument = gql`
+    query OrdersByUser {
+  ordersByUser {
+    ...RegularOrder
+  }
+}
+    ${RegularOrderFragmentDoc}`;
+
+export function useOrdersByUserQuery(options?: Omit<Urql.UseQueryArgs<OrdersByUserQueryVariables>, 'query'>) {
+  return Urql.useQuery<OrdersByUserQuery>({ query: OrdersByUserDocument, ...options });
 };
 export const ProductDocument = gql`
     query Product($id: Int!) {

@@ -9,6 +9,7 @@ import {
   UpdateDateColumn,
 } from "typeorm";
 import { OrderDetails } from "./OrderDetails";
+import { PaymentDetails } from "./PaymentDetails";
 
 @ObjectType()
 @Entity()
@@ -52,14 +53,9 @@ export class User extends BaseEntity {
   @Column({ unique: true })
   telephone!: number;
 
-  @Column({ nullable: true })
-  cardNumber: number;
-
-  @Column({ nullable: true })
-  cardSecurityCode: number;
-
-  @Column({ nullable: true })
-  cardExpiryDate: number;
+  @Field(() => [PaymentDetails], { nullable: true })
+  @OneToMany(() => PaymentDetails, (paymentDetails) => paymentDetails.user)
+  paymentDetails: PaymentDetails[];
 
   @Field(() => [OrderDetails], { nullable: true })
   @OneToMany(() => OrderDetails, (orderDetails) => orderDetails.user)

@@ -10,6 +10,7 @@ import {
   UpdateDateColumn,
 } from "typeorm";
 import { Product } from "./Product";
+import { User } from "./User";
 
 @ObjectType()
 @Entity()
@@ -21,6 +22,10 @@ export class CartItem extends BaseEntity {
   @Field(() => Int)
   @Column()
   userId!: number;
+
+  @Field(() => User)
+  @ManyToOne(() => User)
+  user: User;
 
   @Field(() => Int)
   @PrimaryColumn()

@@ -1,0 +1,5 @@
+query OrderById($id: Int!) {
+  orderById(id: $id) {
+    ...RegularOrder
+  }
+}

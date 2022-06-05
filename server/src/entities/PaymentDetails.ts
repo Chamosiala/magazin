@@ -5,11 +5,13 @@ import {
   CreateDateColumn,
   Entity,
   JoinColumn,
+  ManyToOne,
   OneToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from "typeorm";
 import { OrderDetails } from "./OrderDetails";
+import { User } from "./User";
 
 @ObjectType()
 @Entity()
@@ -23,17 +25,18 @@ export class PaymentDetails extends BaseEntity {
   @JoinColumn()
   order!: OrderDetails;
 
-  @Field()
-  @Column()
-  amount!: number;
+  @Field(() => User)
+  @ManyToOne(() => User, (user) => user.paymentDetails)
+  user: User;
 
-  @Field()
-  @Column()
-  provider!: string;
+  @Column({ nullable: true })
+  cardNumber: number;
 
-  @Field()
-  @Column()
-  status!: string;
+  @Column({ nullable: true })
+  cardSecurityCode: number;
+
+  @Column({ nullable: true })
+  cardExpiryDate: number;
 
   @Field(() => String)
   @CreateDateColumn()
