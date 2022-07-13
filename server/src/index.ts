@@ -19,6 +19,7 @@ import { ProductResolver } from "./resolvers/product";
 import { UserResolver } from "./resolvers/user";
 import { UserPermissionResolver } from "./resolvers/userPermission";
 import { MyContext } from "./types";
+import { PaymentDetailsResolver } from "./resolvers/paymentDetails";
 
 const main = async () => {
   dataSource.initialize().catch((err) => {
@@ -66,6 +67,7 @@ const main = async () => {
         CartItemResolver,
         OrderDetailsResolver,
         OrderItemResolver,
+        PaymentDetailsResolver,
       ],
       validate: false,
     }),

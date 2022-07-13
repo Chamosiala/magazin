@@ -1,0 +1,3 @@
+mutation SetDefaultPayment($paymentDetailsId: Int!) {
+  setDefaultPayment(paymentDetailsId: $paymentDetailsId)
+}

@@ -40,14 +40,14 @@ const login: React.FC<{}> = ({}) => {
             <Box mt={4}>
               <InputField
                 name="password"
-                placeholder="password"
-                label="Password"
+                placeholder="parola"
+                label="Parola"
                 type="password"
               />
             </Box>
             <Flex mt={2}>
               <NextLink href="/forgot-password">
-                <Link ml="auto">Forgot password?</Link>
+                <Link ml="auto">Ai uitat parola?</Link>
               </NextLink>
             </Flex>
             <Button
@@ -56,7 +56,7 @@ const login: React.FC<{}> = ({}) => {
               type="submit"
               colorScheme="teal"
             >
-              Login
+              Intra in cont
             </Button>
           </Form>
         )}

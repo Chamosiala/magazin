@@ -1,9 +1,11 @@
 import {
   Arg,
+  Ctx,
   Field,
   Int,
   Mutation,
   ObjectType,
+  Query,
   Resolver,
   UseMiddleware,
 } from "type-graphql";
@@ -11,6 +13,7 @@ import { User } from "../entities/User";
 import { UserPermission } from "../entities/UserPermission";
 import { FieldError } from "./user";
 import { isAdmin } from "../middlewares/isAdmin";
+import { MyContext } from "../types";
 
 @ObjectType()
 class UserPermissionResponse {
@@ -62,5 +65,21 @@ export class UserPermissionResolver {
     }
 
     return { userPermission };
+  }
+
+  @Query(() => UserPermission, { nullable: true })
+  async myPermission(
+    @Ctx() { req }: MyContext
+  ): Promise<UserPermission | null> {
+    return UserPermission.findOneBy({ userId: req.session.userId });
+  }
+
+  @Mutation(() => Boolean)
+  @UseMiddleware(isAdmin)
+  async deleteUserPermission(
+    @Arg("userId", () => Int) userId: number
+  ): Promise<Boolean> {
+    await UserPermission.delete({ userId });
+    return true;
   }
 }

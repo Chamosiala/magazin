@@ -1,0 +1,11 @@
+mutation CreateUserPermission($userId: Int!, $permission: String!) {
+  createUserPermission(userId: $userId, permission: $permission) {
+    errors {
+      ...RegularError
+    }
+    userPermission {
+      userId
+      permission
+    }
+  }
+}

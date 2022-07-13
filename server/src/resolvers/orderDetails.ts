@@ -14,15 +14,17 @@ import {
   UseMiddleware,
 } from "type-graphql";
 import { CartItem } from "../entities/CartItem";
-import { OrderDetails } from "../entities/OrderDetails";
+import { OrderDetails, orderStates } from "../entities/OrderDetails";
 import { User } from "../entities/User";
 import { isAuth } from "../middlewares/isAuth";
 import { MyContext } from "../types";
 import { FieldError } from "./user";
-import argon2 from "argon2";
 import { sendEmail } from "../utils/sendEmail";
 import { orderItemToHtml } from "../utils/orderItemToHtml";
 import { UserPermission } from "../entities/UserPermission";
+import { isEmployee } from "../middlewares/isEmployee";
+import { AppDataSource as dataSource } from "../AppDataSource";
+import { PaymentDetails } from "../entities/PaymentDetails";
 
 @InputType()
 class OrderDetailsInput {
@@ -34,10 +36,6 @@ class OrderDetailsInput {
   address: string;
   @Field()
   total: number;
-  @Field()
-  numarCard: string;
-  @Field()
-  codSecuritate: string;
 }
 
 @ObjectType()
@@ -86,19 +84,15 @@ export class OrderDetailsResolver {
       };
     }
 
-    const hashedCardNumber = await argon2.hash(input.numarCard);
-    const hashedCardSecurityNumber = await argon2.hash(input.codSecuritate);
     let orderDetails: OrderDetails;
     try {
       orderDetails = await OrderDetails.create({
+        user,
+        userId: req.session.userId,
         judet: input.judet,
         localitate: input.localitate,
         address: input.address,
-        user,
-        userId: req.session.userId,
         total: input.total,
-        numarCard: hashedCardNumber,
-        codSecuritate: hashedCardSecurityNumber,
       }).save();
     } catch (err) {
       console.log(err);
@@ -208,5 +202,114 @@ export class OrderDetailsResolver {
       throw new Error("order belongs to someone else");
     }
     return OrderDetails.findOneBy({ id, userId: req.session.userId });
+  }
+
+  @Query(() => [OrderDetails])
+  @UseMiddleware(isEmployee)
+  async orders(
+    @Arg("limit", () => Int) limit: number,
+    @Arg("cursor", () => String, { nullable: true }) cursor: string | null
+  ): Promise<OrderDetails[]> {
+    const realLimit = Math.min(50, limit);
+    const qb = dataSource
+      .getRepository(OrderDetails)
+      .createQueryBuilder("p")
+      .orderBy('"createdAt"', "DESC")
+      .take(realLimit);
+    if (cursor) {
+      qb.where('"createdAt" < :cursor', { cursor: new Date(parseInt(cursor)) });
+    }
+
+    return qb.getMany();
+  }
+
+  @Mutation(() => OrderDetailsResponse)
+  @UseMiddleware(isEmployee)
+  async updateOrderStatus(
+    @Arg("orderId", () => Int) orderId: number,
+    @Arg("cancelOrder", () => Boolean, { nullable: true })
+    cancelOrder: boolean | null
+  ): Promise<OrderDetailsResponse> {
+    let order = await OrderDetails.findOneBy({ id: orderId });
+
+    if (!order) {
+      return {
+        errors: [
+          {
+            field: "orderDetails",
+            message: "Order does not exist",
+          },
+        ],
+      };
+    }
+
+    if (cancelOrder && order.status !== orderStates[orderStates.length - 2]) {
+      order.status = orderStates[orderStates.length - 1];
+      await dataSource
+        .createQueryBuilder()
+        .update(OrderDetails)
+        .set({
+          status: order.status,
+        })
+        .where("id = :orderId", {
+          orderId,
+        })
+        .execute();
+    }
+
+    if (orderStates.slice(0, -2).includes(order.status)) {
+      const index = orderStates.findIndex((state) => state === order!.status);
+      console.log("--------", orderStates[orderStates.length - 1], "--------");
+      order.status = orderStates[index + 1];
+
+      await dataSource
+        .createQueryBuilder()
+        .update(OrderDetails)
+        .set({
+          status: order.status,
+        })
+        .where("id = :orderId", {
+          orderId,
+        })
+        .execute();
+    }
+
+    return { orderDetails: order };
+  }
+
+  @Mutation(() => OrderDetailsResponse)
+  @UseMiddleware(isEmployee)
+  async setOrderStatus(
+    @Arg("orderId", () => Int) orderId: number,
+    @Arg("orderStatus", () => String)
+    orderStatus: string
+  ): Promise<OrderDetailsResponse> {
+    let order = await OrderDetails.findOneBy({ id: orderId });
+
+    if (!order) {
+      return {
+        errors: [
+          {
+            field: "orderDetails",
+            message: "Order does not exist",
+          },
+        ],
+      };
+    }
+
+    order.status = orderStatus;
+
+    await dataSource
+      .createQueryBuilder()
+      .update(OrderDetails)
+      .set({
+        status: order.status,
+      })
+      .where("id = :orderId", {
+        orderId,
+      })
+      .execute();
+
+    return { orderDetails: order };
   }
 }

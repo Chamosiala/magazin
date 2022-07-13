@@ -29,6 +29,8 @@ class ProductInput {
   category!: string;
   @Field()
   price!: number;
+  @Field()
+  imageLink: string;
 }
 
 @ObjectType()
@@ -94,7 +96,7 @@ export class ProductResolver {
       return {
         errors: [
           {
-            field: "unkown",
+            field: "unknown",
             message: err.message,
           },
         ],
@@ -104,23 +106,51 @@ export class ProductResolver {
     return { product };
   }
 
-  @Mutation(() => Product, { nullable: true })
+  @Mutation(() => ProductResponse, { nullable: true })
+  @UseMiddleware(isAdmin)
   async updateProduct(
-    @Arg("id") id: number,
-    @Arg("name", () => String, { nullable: true }) name: string
-  ): Promise<Product | null> {
-    const product = await Product.findOneBy({ id });
-    if (!product) {
-      return null;
+    @Arg("id", () => Int) id: number,
+    @Arg("input") input: ProductInput
+  ): Promise<ProductResponse> {
+    let result;
+    try {
+      result = await dataSource
+        .getRepository(Product)
+        .createQueryBuilder()
+        .update(Product)
+        .set({
+          name: input.name,
+          desc: input.desc,
+          SKU: input.SKU,
+          category: input.category,
+          price: input.price,
+        })
+        .where("id = :id", {
+          id,
+        })
+        .returning("*")
+        .execute();
+    } catch (err) {
+      const alreadyExists = duplicateFieldCheck(err);
+      if (alreadyExists) {
+        return alreadyExists;
+      }
+
+      return {
+        errors: [
+          {
+            field: "unknown",
+            message: err.message,
+          },
+        ],
+      };
     }
-    if (typeof name !== "undefined") {
-      product.name = name;
-      await Product.update({ id }, { name });
-    }
-    return product;
+
+    return { product: result.raw[0] };
   }
 
   @Mutation(() => Boolean)
+  @UseMiddleware(isAdmin)
   async deleteProduct(@Arg("id") id: number): Promise<boolean> {
     await Product.delete(id);
     return true;

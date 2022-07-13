@@ -35,7 +35,7 @@ const Product: NextPage<{ productName: string }> = () => {
             mb={5}
             boxSize="368px"
             objectFit="cover"
-            src="https://s.iw.ro/gateway/g/ZmlsZVNvdXJjZT1odHRwJTNBJTJGJTJG/c3RvcmFnZWRpZ2lhbmltYWx3b3JsZC5y/Y3MtcmRzLnJvJTJGc3RvcmFnZSUyRjIw/MTklMkYwMiUyRjI4JTJGMTA0NzU0Nl8x/MDQ3NTQ2X2Jyb2FzY2EtbWljYS0xLmpw/ZyZ3PTc4MCZoPTYwMCZ6Yz0xJmhhc2g9/ZmUyYTk3NWQwZmE5YzAzMTJmZTE5NWYxYmM4ZTQ3NTc=.thumb.jpg"
+            src={productData?.productByName!.imageLink ?? ""}
           ></Image>
           <Box ml="auto">
             <Text fontSize="2xl" color="accent" mb={5}>

@@ -1,0 +1,20 @@
+fragment RegularProduct on Product {
+  id
+  name
+  desc
+  descSnippet
+  SKU
+  category
+  price
+  imageLink
+  discount {
+    id
+    name
+    desc
+    discountPercent
+    createdAt
+    updatedAt
+  }
+  createdAt
+  updatedAt
+}

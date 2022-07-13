@@ -22,6 +22,7 @@ fragment RegularOrder on OrderDetails {
     }
     quantity
   }
+  userId
   status
   total
   address

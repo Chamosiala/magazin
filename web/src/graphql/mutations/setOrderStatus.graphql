@@ -1,0 +1,10 @@
+mutation SetOrderStatus($orderId: Int!, $orderStatus: String!) {
+  setOrderStatus(orderId: $orderId, orderStatus: $orderStatus) {
+    errors {
+      ...RegularError
+    }
+    orderDetails {
+      ...RegularOrder
+    }
+  }
+}

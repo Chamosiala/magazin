@@ -1,0 +1,13 @@
+fragment RegularPaymentDetails on PaymentDetails {
+  id
+  userId
+  user {
+    ...RegularUser
+  }
+  lastCardNumberDigits
+  cardExpiryDate
+  isExpired
+  dataFrumoasa
+  createdAt
+  updatedAt
+}

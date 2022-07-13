@@ -1,17 +1,19 @@
 import { cacheExchange } from "@urql/exchange-graphcache";
 import Router from "next/router";
-import { dedupExchange, Exchange, fetchExchange, gql } from "urql";
+import { dedupExchange, Exchange, fetchExchange } from "urql";
 import { pipe, tap } from "wonka";
 import {
+  CartItemsByUserQuery,
   CartItemsDocument,
+  CartItemsQuery,
+  CreateCartItemMutation,
   DeleteCartItemMutationVariables,
+  DeletePaymentDetailsMutationVariables,
   LoginMutation,
   LogoutMutation,
   MeDocument,
   MeQuery,
-  CartItemsQuery,
   RegisterMutation,
-  CreateCartItemMutation,
 } from "../generated/graphql";
 import { betterUpdateQuery } from "./betterUpdateQuery";
 
@@ -52,13 +54,12 @@ export const createUrqlClient = (ssrExchange: any) => ({
             );
           },
           createCartItem: (_result, _args, cache, _info) => {
-            betterUpdateQuery<CreateCartItemMutation, CartItemsQuery>(
+            betterUpdateQuery<CreateCartItemMutation, CartItemsByUserQuery>(
               cache,
               { query: CartItemsDocument },
               _result,
               (result, query) => {
-                query.cartItems.push(result.createCartItem.cartItem!);
-                console.log("this is the query: ", query);
+                query.cartItemsByUser.push(result.createCartItem.cartItem!);
                 return query;
               }
             );
@@ -67,6 +68,12 @@ export const createUrqlClient = (ssrExchange: any) => ({
             cache.invalidate({
               __typename: "CartItem",
               id: (args as DeleteCartItemMutationVariables).id,
+            });
+          },
+          deletePaymentDetails: (_result, args, cache, info) => {
+            cache.invalidate({
+              __typename: "PaymentDetails",
+              id: (args as DeletePaymentDetailsMutationVariables).id,
             });
           },
           login: (_result, args, cache, info) => {

@@ -1,0 +1,10 @@
+mutation UpdateOrderStatus($orderId: Int!, $cancelOrder: Boolean) {
+  updateOrderStatus(orderId: $orderId, cancelOrder: $cancelOrder) {
+    errors {
+      ...RegularError
+    }
+    orderDetails {
+      ...RegularOrder
+    }
+  }
+}

@@ -2,11 +2,11 @@ import { Box, Button, Flex, Heading, Stack, Text } from "@chakra-ui/react";
 import React from "react";
 import NextLink from "next/link";
 
-interface ProductProps {
+interface OrderProps {
   order: any;
 }
 
-export const Order: React.FC<ProductProps> = ({ order }) => {
+export const Order: React.FC<OrderProps> = ({ order }) => {
   return (
     <Stack spacing={8}>
       <Box p={5} width="590px" shadow="md" borderWidth="1px">

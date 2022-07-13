@@ -4,10 +4,7 @@ mutation CreateProduct($input: ProductInput!) {
       ...RegularError
     }
     product {
-      name
-      desc
-      SKU
-      category
+      ...RegularProduct
     }
   }
 }

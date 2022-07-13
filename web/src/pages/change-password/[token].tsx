@@ -40,8 +40,8 @@ const ChangePassword: NextPage<{ token: string }> = () => {
           <Form>
             <InputField
               name="newPassword"
-              placeholder="new password"
-              label="New Password"
+              placeholder="noua parola"
+              label="Noua parola"
               type="password"
             />
             {tokenError && (
@@ -50,7 +50,7 @@ const ChangePassword: NextPage<{ token: string }> = () => {
                   {tokenError}
                 </Box>
                 <NextLink href="/forgot-password">
-                  <Link>Request another token</Link>
+                  <Link>Cere inca un token</Link>
                 </NextLink>
               </Flex>
             )}
@@ -60,7 +60,7 @@ const ChangePassword: NextPage<{ token: string }> = () => {
               type="submit"
               colorScheme="teal"
             >
-              Change Password
+              Schimba parola
             </Button>
           </Form>
         )}

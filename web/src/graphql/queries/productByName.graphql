@@ -1,21 +1,5 @@
 query ProductByName($name: String!) {
   productByName(name: $name) {
-    id
-    createdAt
-    updatedAt
-    name
-    desc
-    descSnippet
-    price
-    SKU
-    category
-    discount {
-      id
-      name
-      desc
-      discountPercent
-      createdAt
-      updatedAt
-    }
+    ...RegularProduct
   }
 }

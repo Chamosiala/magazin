@@ -37,7 +37,7 @@ export const validateRegister = (options: RegisterInput) => {
     ];
   }
 
-  if (options.telephone > 9999999999) {
+  if (options.telephone > 9999999999 || options.telephone < 100000000) {
     return [
       {
         field: "telephone",

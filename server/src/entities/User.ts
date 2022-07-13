@@ -1,4 +1,4 @@
-import { Field, Float, ObjectType } from "type-graphql";
+import { Field, Float, Int, ObjectType } from "type-graphql";
 import {
   BaseEntity,
   Column,
@@ -56,6 +56,9 @@ export class User extends BaseEntity {
   @Field(() => [PaymentDetails], { nullable: true })
   @OneToMany(() => PaymentDetails, (paymentDetails) => paymentDetails.user)
   paymentDetails: PaymentDetails[];
+
+  @Field(() => Int, { nullable: true })
+  defaultPayment: number | null;
 
   @Field(() => [OrderDetails], { nullable: true })
   @OneToMany(() => OrderDetails, (orderDetails) => orderDetails.user)

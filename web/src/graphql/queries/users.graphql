@@ -1,0 +1,5 @@
+query Users($limit: Int!, $cursor: String) {
+  users(limit: $limit, cursor: $cursor) {
+    ...RegularUser
+  }
+}

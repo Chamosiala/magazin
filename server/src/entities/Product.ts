@@ -31,6 +31,10 @@ export class Product extends BaseEntity {
   @Column()
   SKU!: string;
 
+  @Field(() => String, { nullable: true })
+  @Column()
+  imageLink: string;
+
   @Field()
   @Column()
   category!: string;

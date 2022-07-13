@@ -3,13 +3,13 @@ import { Form, Formik } from "formik";
 import { withUrqlClient } from "next-urql";
 import { useRouter } from "next/router";
 import React from "react";
-import { InputField } from "../../components/InputField";
-import { Layout } from "../../components/Layout";
-import { TextareaField } from "../../components/TextareaField";
-import { useCreateProductMutation } from "../../generated/graphql";
-import { createUrqlClient } from "../../utils/createUrqlClient";
-import { toErrorMap } from "../../utils/toErrorMap";
-import { useIsAuth } from "../../utils/useIsAuth";
+import { InputField } from "../../../components/InputField";
+import { Layout } from "../../../components/Layout";
+import { TextareaField } from "../../../components/TextareaField";
+import { useCreateProductMutation } from "../../../generated/graphql";
+import { createUrqlClient } from "../../../utils/createUrqlClient";
+import { toErrorMap } from "../../../utils/toErrorMap";
+import { useIsAuth } from "../../../utils/useIsAuth";
 
 interface createProductProps {}
 
@@ -24,6 +24,7 @@ const createProduct: React.FC<createProductProps> = ({}) => {
           name: "",
           desc: "",
           SKU: "",
+          imageLink: "",
           category: "",
           price: 0,
         }}
@@ -39,13 +40,13 @@ const createProduct: React.FC<createProductProps> = ({}) => {
         {({ isSubmitting }) => (
           <Form>
             <Box mt={4}>
-              <InputField name="name" placeholder="name" label="Name" />
+              <InputField name="name" placeholder="nume" label="Nume" />
             </Box>
             <Box mt={4}>
               <TextareaField
                 name="desc"
-                placeholder="description"
-                label="Description"
+                placeholder="descriere"
+                label="Descriere"
               />
             </Box>
             <Box mt={4}>
@@ -53,16 +54,23 @@ const createProduct: React.FC<createProductProps> = ({}) => {
             </Box>
             <Box mt={4}>
               <InputField
+                name="imageLink"
+                placeholder="Link Imagine"
+                label="Link Imagine"
+              />
+            </Box>
+            <Box mt={4}>
+              <InputField
                 name="category"
-                placeholder="category"
-                label="Category"
+                placeholder="categorie"
+                label="Categorie"
               />
             </Box>
             <Box mt={4}>
               <InputField
                 name="price"
-                placeholder="price"
-                label="Price"
+                placeholder="pret"
+                label="Pret"
                 type="number"
               />
             </Box>
@@ -72,7 +80,7 @@ const createProduct: React.FC<createProductProps> = ({}) => {
               type="submit"
               colorScheme="teal"
             >
-              Create Product
+              Creeaza produsul
             </Button>
           </Form>
         )}

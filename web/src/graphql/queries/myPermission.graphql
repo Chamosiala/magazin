@@ -1,0 +1,5 @@
+query MyPermission {
+  myPermission {
+    permission
+  }
+}

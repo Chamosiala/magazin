@@ -11,29 +11,33 @@ export const NavBar: React.FC<NavBarProps> = ({}) => {
   const [{ data, fetching }] = useMeQuery({
     pause: isServer(),
   });
-  // const [{ data: cartData, fetching: cartFetching }] = useCartItemsQuery({
-  //   pause: isServer(),
-  //   variables: { limit: 50 },
-  // });
   let body = null;
-
-  // useEffect(() => {
-  //   console.log(cartData?.cartItems.length);
-  // }, [cartData]);
+  let employeePanel = null;
 
   if (fetching) {
   } else if (!data?.me) {
     body = (
       <>
         <NextLink href="/login">
-          <Link mr={2}>Login</Link>
+          <Link mr={2}>Intra in cont</Link>
         </NextLink>
         <NextLink href="/register">
-          <Link>Register</Link>
+          <Link>Cont nou</Link>
         </NextLink>
       </>
     );
   } else {
+    employeePanel = (
+      <Flex>
+        {data.me.permission && (
+          <NextLink href="/employee/">
+            <Link mr={2} color="accent">
+              Interfata angajati
+            </Link>
+          </NextLink>
+        )}
+      </Flex>
+    );
     body = (
       <Flex>
         <NextLink href="/user/details">
@@ -41,19 +45,21 @@ export const NavBar: React.FC<NavBarProps> = ({}) => {
             {data.me.username}
           </Link>
         </NextLink>
-        <Button
-          onClick={() => {
-            logout();
-          }}
-          mr={2}
-          isLoading={logoutFetching}
-          variant="link"
-          color={"#F7F6F1"}
-        >
-          Logout
-        </Button>
+        <NextLink href="/">
+          <Button
+            onClick={() => {
+              logout();
+            }}
+            mr={2}
+            isLoading={logoutFetching}
+            variant="link"
+            color={"#F7F6F1"}
+          >
+            Log out
+          </Button>
+        </NextLink>
         <NextLink href="/cart/products">
-          <Link color={"accent"}>Cart</Link>
+          <Link textColor={"accent"}>Cos</Link>
         </NextLink>
       </Flex>
     );
@@ -61,13 +67,14 @@ export const NavBar: React.FC<NavBarProps> = ({}) => {
 
   return (
     <Flex zIndex={1} position="sticky" top={0} bg="primary" p={4} ml={"auto"}>
-      <Box mr={"auto"}>
+      <Flex mr={"auto"}>
         <NextLink href="/">
           <Link mr={2} color="white" textColor={"lightFont"}>
             Magazin
           </Link>
         </NextLink>
-      </Box>
+        {employeePanel}
+      </Flex>
       <Box ml={"auto"}>{body}</Box>
     </Flex>
   );

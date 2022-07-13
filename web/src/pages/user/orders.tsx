@@ -1,10 +1,9 @@
-import { Box, Flex, Grid, Heading, Text } from "@chakra-ui/react";
+import { Box, Flex, Grid, Heading } from "@chakra-ui/react";
 import { withUrqlClient } from "next-urql";
 import { Layout } from "../../components/Layout";
 import { Order } from "../../components/Order";
-import { useMeQuery, useOrdersByUserQuery } from "../../generated/graphql";
+import { useOrdersByUserQuery } from "../../generated/graphql";
 import { createUrqlClient } from "../../utils/createUrqlClient";
-import { isServer } from "../../utils/isServer";
 
 const Orders = () => {
   const [{ data: ordersData }] = useOrdersByUserQuery();
@@ -16,8 +15,8 @@ const Orders = () => {
         </Flex>
         <Flex>
           <Box>
-            {!ordersData ? (
-              <div>Loading...</div>
+            {!ordersData?.ordersByUser ? (
+              <div>Nicio comanda</div>
             ) : (
               <Grid
                 h="200px"

@@ -8,5 +8,8 @@ fragment RegularUser on User {
   localitate
   address
   telephone
-  isAdmin
+  permission
+  defaultPayment
+  createdAt
+  updatedAt
 }

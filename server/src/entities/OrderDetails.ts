@@ -45,14 +45,6 @@ export class OrderDetails extends BaseEntity {
   total!: number;
 
   @Field()
-  @Column()
-  numarCard: string;
-
-  @Field()
-  @Column()
-  codSecuritate: string;
-
-  @Field()
   @Column({ default: "In asteptare" })
   status!: string;
 
@@ -68,3 +60,11 @@ export class OrderDetails extends BaseEntity {
   @UpdateDateColumn()
   updatedAt = new Date();
 }
+
+export const orderStates = [
+  "In asteptare",
+  "In lucru",
+  "In curs de livrare",
+  "Finalizata",
+  "Anulata",
+];

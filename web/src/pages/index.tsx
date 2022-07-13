@@ -1,6 +1,5 @@
-import { Flex, Grid, Heading, Link } from "@chakra-ui/react";
+import { Flex, Grid, Heading } from "@chakra-ui/react";
 import { withUrqlClient } from "next-urql";
-import NextLink from "next/link";
 import { Layout } from "../components/Layout";
 import { Product } from "../components/Product";
 import { useProductsQuery } from "../generated/graphql";
@@ -16,9 +15,6 @@ const Index = () => {
     <Layout>
       <Flex mb={5} align="center">
         <Heading>Magazin</Heading>
-        <NextLink href="/admin/create-product">
-          <Link ml="auto">Creeaza Produs</Link>
-        </NextLink>
       </Flex>
 
       {!data ? (

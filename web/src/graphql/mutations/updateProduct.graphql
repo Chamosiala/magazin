@@ -1,0 +1,10 @@
+mutation UpdateProduct($id: Int!, $input: ProductInput!) {
+  updateProduct(id: $id, input: $input) {
+    errors {
+      ...RegularError
+    }
+    product {
+      ...RegularProduct
+    }
+  }
+}

@@ -1,0 +1,10 @@
+mutation CreatePaymentDetails($input: PaymentDetailsInput!) {
+  createPaymentDetails(input: $input) {
+    errors {
+      ...RegularError
+    }
+    paymentDetails {
+      ...RegularPaymentDetails
+    }
+  }
+}

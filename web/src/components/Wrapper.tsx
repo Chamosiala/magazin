@@ -2,10 +2,10 @@ import { Box, Button, Flex, Link, VStack } from "@chakra-ui/react";
 import React from "react";
 import NextLink from "next/link";
 
-export type WrapperVariant = "small" | "regular" | "user";
+export type WrapperVariant = "small" | "regular" | "user" | "angajat";
 
 interface WrapperProps {
-  variant?: "small" | "regular" | "user";
+  variant?: "small" | "regular" | "user" | "angajat";
   children: any;
 }
 
@@ -22,6 +22,22 @@ export const Wrapper: React.FC<WrapperProps> = ({
           </NextLink>
           <NextLink href="/user/orders">
             <Button width="145px">Comenzile mele</Button>
+          </NextLink>
+          <NextLink href="/user/paymentDetails">
+            <Button width="145px">Cardurile mele</Button>
+          </NextLink>
+        </VStack>
+      )}
+      {variant === "angajat" && (
+        <VStack mt={20}>
+          <NextLink href="/employee/orders">
+            <Button width="145px">Comenzi</Button>
+          </NextLink>
+          <NextLink href="/employee/products">
+            <Button width="145px">Produse</Button>
+          </NextLink>
+          <NextLink href="/employee/admin/users">
+            <Button width="145px">Utilizatori</Button>
           </NextLink>
         </VStack>
       )}

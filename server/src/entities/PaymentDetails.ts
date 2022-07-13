@@ -1,42 +1,46 @@
-import { Field, ObjectType } from "type-graphql";
+import { Field, Int, ObjectType } from "type-graphql";
 import {
   BaseEntity,
   Column,
   CreateDateColumn,
   Entity,
-  JoinColumn,
   ManyToOne,
-  OneToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from "typeorm";
-import { OrderDetails } from "./OrderDetails";
 import { User } from "./User";
 
 @ObjectType()
 @Entity()
 export class PaymentDetails extends BaseEntity {
-  @Field()
+  @Field(() => Int)
   @PrimaryGeneratedColumn()
   id!: number;
 
-  @Field(() => OrderDetails)
-  @OneToOne(() => OrderDetails)
-  @JoinColumn()
-  order!: OrderDetails;
+  @Field(() => Int)
+  @Column()
+  userId!: number;
 
   @Field(() => User)
   @ManyToOne(() => User, (user) => user.paymentDetails)
   user: User;
 
-  @Column({ nullable: true })
-  cardNumber: number;
+  @Column()
+  cardNumber!: string;
 
-  @Column({ nullable: true })
-  cardSecurityCode: number;
+  @Field()
+  @Column()
+  lastCardNumberDigits!: number;
 
-  @Column({ nullable: true })
-  cardExpiryDate: number;
+  @Column()
+  cardSecurityCode!: string;
+
+  @Field(() => String)
+  @Column()
+  cardExpiryDate!: Date;
+
+  @Field()
+  isExpired: Boolean;
 
   @Field(() => String)
   @CreateDateColumn()
