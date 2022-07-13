@@ -144,7 +144,7 @@ export type MutationDeletePaymentDetailsArgs = {
 
 
 export type MutationDeleteProductArgs = {
-  id: Scalars['Float'];
+  id: Scalars['Int'];
 };
 
 
@@ -496,6 +496,13 @@ export type DeletePaymentDetailsMutationVariables = Exact<{
 
 
 export type DeletePaymentDetailsMutation = { __typename?: 'Mutation', deletePaymentDetails: boolean };
+
+export type DeleteProductMutationVariables = Exact<{
+  id: Scalars['Int'];
+}>;
+
+
+export type DeleteProductMutation = { __typename?: 'Mutation', deleteProduct: boolean };
 
 export type DeleteUserPermissionMutationVariables = Exact<{
   userId: Scalars['Int'];
@@ -928,6 +935,15 @@ export const DeletePaymentDetailsDocument = gql`
 
 export function useDeletePaymentDetailsMutation() {
   return Urql.useMutation<DeletePaymentDetailsMutation, DeletePaymentDetailsMutationVariables>(DeletePaymentDetailsDocument);
+};
+export const DeleteProductDocument = gql`
+    mutation DeleteProduct($id: Int!) {
+  deleteProduct(id: $id)
+}
+    `;
+
+export function useDeleteProductMutation() {
+  return Urql.useMutation<DeleteProductMutation, DeleteProductMutationVariables>(DeleteProductDocument);
 };
 export const DeleteUserPermissionDocument = gql`
     mutation DeleteUserPermission($userId: Int!) {

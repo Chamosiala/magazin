@@ -1,3 +1,4 @@
+import { Cascade } from "@mikro-orm/core";
 import { Field, Int, ObjectType } from "type-graphql";
 import {
   BaseEntity,
@@ -32,7 +33,7 @@ export class CartItem extends BaseEntity {
   productId!: number;
 
   @Field(() => Product)
-  @ManyToOne(() => Product)
+  @ManyToOne(() => Product, { onDelete: "CASCADE" })
   product: Product;
 
   @Field()

@@ -151,7 +151,7 @@ export class ProductResolver {
 
   @Mutation(() => Boolean)
   @UseMiddleware(isAdmin)
-  async deleteProduct(@Arg("id") id: number): Promise<boolean> {
+  async deleteProduct(@Arg("id", () => Int) id: number): Promise<boolean> {
     await Product.delete(id);
     return true;
   }

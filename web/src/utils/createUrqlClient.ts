@@ -9,6 +9,7 @@ import {
   CreateCartItemMutation,
   DeleteCartItemMutationVariables,
   DeletePaymentDetailsMutationVariables,
+  DeleteProductMutationVariables,
   LoginMutation,
   LogoutMutation,
   MeDocument,
@@ -68,6 +69,12 @@ export const createUrqlClient = (ssrExchange: any) => ({
             cache.invalidate({
               __typename: "CartItem",
               id: (args as DeleteCartItemMutationVariables).id,
+            });
+          },
+          deleteProduct: (_result, args, cache, info) => {
+            cache.invalidate({
+              __typename: "Product",
+              id: (args as DeleteProductMutationVariables).id,
             });
           },
           deletePaymentDetails: (_result, args, cache, info) => {

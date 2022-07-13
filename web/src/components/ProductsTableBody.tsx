@@ -10,7 +10,7 @@ import {
 } from "@chakra-ui/react";
 import NextLink from "next/link";
 import React from "react";
-import { Product } from "../generated/graphql";
+import { Product, useDeleteProductMutation } from "../generated/graphql";
 
 interface ProductsTableBodyProps {
   products: Product[];
@@ -19,6 +19,7 @@ interface ProductsTableBodyProps {
 export const ProductsTableBody: React.FC<ProductsTableBodyProps> = ({
   products,
 }) => {
+  const [, deleteProduct] = useDeleteProductMutation();
   return (
     <Tbody>
       {products.map((product) =>
@@ -60,7 +61,7 @@ export const ProductsTableBody: React.FC<ProductsTableBodyProps> = ({
                 mr={2}
                 colorScheme="red"
                 onClick={() => {
-                  // deleteuser({ id: user.id });
+                  deleteProduct({ id: product.id });
                 }}
                 aria-label="Delete product"
                 icon={<DeleteIcon />}
