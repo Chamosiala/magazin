@@ -275,6 +275,16 @@ export class UserResolver {
     @Arg("password") password: string,
     @Ctx() { req }: MyContext
   ): Promise<UserResponse> {
+    if (usernameOrEmail === "") {
+      return {
+        errors: [
+          {
+            field: "usernameOrEmail",
+            message: "Introdu un nume sau email",
+          },
+        ],
+      };
+    }
     const user = await User.findOneBy(
       usernameOrEmail.includes("@")
         ? { email: usernameOrEmail }
@@ -291,6 +301,16 @@ export class UserResolver {
       };
     }
     const valid = await argon2.verify(user.password, password);
+    if (password === "") {
+      return {
+        errors: [
+          {
+            field: "password",
+            message: "Introdu o parola",
+          },
+        ],
+      };
+    }
     if (!valid) {
       return {
         errors: [

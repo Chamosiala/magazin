@@ -123,6 +123,7 @@ export class ProductResolver {
           desc: input.desc,
           SKU: input.SKU,
           category: input.category,
+          imageLink: input.imageLink,
           price: input.price,
         })
         .where("id = :id", {
